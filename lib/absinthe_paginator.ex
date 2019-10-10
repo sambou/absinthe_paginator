@@ -14,7 +14,7 @@ defmodule AbsinthePaginator do
           Keyword.t(),
           Keyword.t()
         ) ::
-          AbsintheRelay.Connection.t()
+          {:ok, AbsintheRelay.Connection.t()}
   def from_paginator(query, paginate, args, opts, repo_opts \\ [])
 
   def from_paginator(query, paginate, %{first: limit, after: cursor}, opts, repo_opts) do
@@ -78,13 +78,14 @@ defmodule AbsinthePaginator do
         )
     }
 
-    %{
-      edges:
-        if(relay_opts[:dir] == :backward,
-          do: Enum.reverse(edges),
-          else: edges
-        ),
-      page_info: page_info
-    }
+    {:ok,
+     %{
+       edges:
+         if(relay_opts[:dir] == :backward,
+           do: Enum.reverse(edges),
+           else: edges
+         ),
+       page_info: page_info
+     }}
   end
 end
